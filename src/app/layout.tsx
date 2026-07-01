@@ -1,6 +1,11 @@
 import Providers from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import { DIGICRAFT_LOGO_PATH } from "@/lib/branding";
+import {
+    DEFAULT_DESCRIPTION,
+    getSiteUrl,
+    SITE_NAME,
+} from "@/lib/site";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ReactNode } from "react";
@@ -8,25 +13,25 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const siteUrl = "https://career.digicraft.one";
-
 export const metadata: Metadata = {
-    metadataBase: new URL(siteUrl),
+    metadataBase: new URL(getSiteUrl()),
     title: {
-        default: "DigiCraft Careers",
-        template: "%s | DigiCraft Careers",
+        default: SITE_NAME,
+        template: `%s | ${SITE_NAME}`,
     },
-    description:
-        "Explore career opportunities at DigiCraft. Join our team building reliable, production-grade digital products.",
+    description: DEFAULT_DESCRIPTION,
+    robots: { index: true, follow: true },
     icons: {
         icon: [{ url: DIGICRAFT_LOGO_PATH, type: "image/png" }],
         apple: DIGICRAFT_LOGO_PATH,
     },
     openGraph: {
-        title: "DigiCraft Careers",
-        description: "Build the future with DigiCraft",
-        url: siteUrl,
-        siteName: "DigiCraft Careers",
+        title: SITE_NAME,
+        description: DEFAULT_DESCRIPTION,
+        url: getSiteUrl(),
+        siteName: SITE_NAME,
+        locale: "en_IN",
+        type: "website",
         images: [
             {
                 url: DIGICRAFT_LOGO_PATH,
@@ -35,6 +40,11 @@ export const metadata: Metadata = {
                 alt: "DigiCraft",
             },
         ],
+    },
+    twitter: {
+        card: "summary",
+        title: SITE_NAME,
+        description: DEFAULT_DESCRIPTION,
     },
 };
 

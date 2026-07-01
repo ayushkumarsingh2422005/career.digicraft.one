@@ -1,5 +1,6 @@
 import PageShell from "@/components/PageShell";
 import SectionHeading from "@/components/SectionHeading";
+import { SITE_NAME } from "@/lib/site";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,11 @@ export const metadata: Metadata = {
     title: "About",
     description:
         "Learn about DigiCraft Innovation Private Limited — our company profile, registration details, and founder Ayush Kumar Singh.",
+    alternates: { canonical: "/about" },
+    openGraph: {
+        title: `About | ${SITE_NAME}`,
+        url: "/about",
+    },
 };
 
 const companyFacts = [

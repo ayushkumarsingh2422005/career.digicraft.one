@@ -1,0 +1,104 @@
+"use client";
+
+import PageShell from "@/components/PageShell";
+import { Job } from "@/lib/types";
+import Link from "next/link";
+import { FiArrowRight, FiBriefcase, FiClock, FiMapPin } from "react-icons/fi";
+
+export default function JobDetailClient({
+    job,
+    slug,
+}: {
+    job: Job;
+    slug: string;
+}) {
+    return (
+        <PageShell>
+            <div className="border-b border-(--career-border) bg-(--career-bg-subtle)">
+                <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+                    <Link
+                        href="/jobs"
+                        className="mb-6 inline-block text-sm text-(--career-text-muted) transition-colors hover:text-(--career-accent)"
+                    >
+                        ← All open roles
+                    </Link>{" "}
+                    <span className="career-badge mb-4 inline-block">
+                        {job.department}
+                    </span>
+                    <h1 className="mb-6 text-3xl font-normal tracking-tight text-(--career-text) md:text-4xl">
+                        {job.title}
+                    </h1>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-(--career-text-muted)">
+                        <span className="flex items-center gap-2">
+                            <FiMapPin className="h-4 w-4" />
+                            {job.location}
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <FiBriefcase className="h-4 w-4" />
+                            {job.employmentType}
+                        </span>
+                        <span className="flex items-center gap-2">
+                            <FiClock className="h-4 w-4" />
+                            {job.experienceLevel}
+                        </span>
+                        {job.salaryRange?.displayText && (
+                            <span className="font-medium text-(--career-text)">
+                                {job.salaryRange.displayText}
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="mx-auto max-w-4xl px-4 py-12 pb-20 sm:px-6 lg:px-8">
+                <article className="prose-career space-y-10">
+                    <section>
+                        <h2>About the role</h2>
+                        <p className="whitespace-pre-wrap">{job.description}</p>
+                    </section>
+
+                    {job.responsibilities?.length > 0 && (
+                        <section>
+                            <h2>Responsibilities</h2>
+                            <ul>
+                                {job.responsibilities.map((r, i) => (
+                                    <li key={i}>{r}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {job.requirements?.length > 0 && (
+                        <section>
+                            <h2>Requirements</h2>
+                            <ul>
+                                {job.requirements.map((r, i) => (
+                                    <li key={i}>{r}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+
+                    {job.niceToHave?.length > 0 && (
+                        <section>
+                            <h2>Nice to have</h2>
+                            <ul>
+                                {job.niceToHave.map((r, i) => (
+                                    <li key={i}>{r}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+                </article>
+
+                <Link
+                    href={`/jobs/${slug}/apply`}
+                    className="career-btn-primary mt-12"
+                >
+                    Apply for this role
+                    <FiArrowRight />
+                </Link>
+            </div>
+        </PageShell>
+    );
+}

@@ -46,6 +46,7 @@ export default function JobForm({ initialData }: JobFormProps) {
         slug: initialData?.seo?.slug || "",
         seoTitle: initialData?.seo?.title || "",
         seoDescription: initialData?.seo?.description || "",
+        seoKeywords: initialData?.seo?.keywords?.join(", ") || "",
         applicationDeadline: initialData?.applicationDeadline
             ? new Date(initialData.applicationDeadline).toISOString().split("T")[0]
             : "",
@@ -57,6 +58,8 @@ export default function JobForm({ initialData }: JobFormProps) {
             title,
             slug: initialData ? prev.slug : slugify(title),
             seoTitle: prev.seoTitle || title,
+            seoDescription:
+                prev.seoDescription || prev.description.slice(0, 160),
         }));
     };
 
@@ -91,8 +94,12 @@ export default function JobForm({ initialData }: JobFormProps) {
             seo: {
                 slug: form.slug,
                 title: form.seoTitle || form.title,
-                description: form.seoDescription || form.description.slice(0, 160),
-                keywords: [],
+                description:
+                    form.seoDescription || form.description.slice(0, 160),
+                keywords: form.seoKeywords
+                    .split(",")
+                    .map((s) => s.trim())
+                    .filter(Boolean),
             },
             applicationDeadline: form.applicationDeadline || undefined,
         };
@@ -237,6 +244,55 @@ export default function JobForm({ initialData }: JobFormProps) {
                         }
                         required
                     />
+                    <p className="text-xs text-slate-500">
+                        Public URL: /jobs/{form.slug || "your-role-slug"}
+                    </p>
+                </div>
+            </div>
+
+            <div className="rounded-lg border border-slate-200 bg-slate-50/50 p-4 space-y-4">
+                <div>
+                    <h3 className="text-sm font-medium text-slate-800">
+                        SEO (search & sharing)
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                        Controls how this role appears on Google and when shared
+                        on social media.
+                    </p>
+                </div>
+                <div className="space-y-2">
+                    <Label>Meta title</Label>
+                    <Input
+                        value={form.seoTitle}
+                        onChange={(e) =>
+                            setForm({ ...form, seoTitle: e.target.value })
+                        }
+                        placeholder={form.title || "Defaults to job title"}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label>Meta description</Label>
+                    <Textarea
+                        value={form.seoDescription}
+                        onChange={(e) =>
+                            setForm({ ...form, seoDescription: e.target.value })
+                        }
+                        rows={2}
+                        placeholder="Short summary for search results (max ~160 chars)"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <Label>Keywords</Label>
+                    <Input
+                        value={form.seoKeywords}
+                        onChange={(e) =>
+                            setForm({ ...form, seoKeywords: e.target.value })
+                        }
+                        placeholder="react, node.js, remote, full-stack"
+                    />
+                    <p className="text-xs text-slate-500">
+                        Comma-separated. Optional but helps search relevance.
+                    </p>
                 </div>
             </div>
 
@@ -245,7 +301,13 @@ export default function JobForm({ initialData }: JobFormProps) {
                 <Textarea
                     value={form.description}
                     onChange={(e) =>
-                        setForm({ ...form, description: e.target.value })
+                        setForm({
+                            ...form,
+                            description: e.target.value,
+                            seoDescription:
+                                form.seoDescription ||
+                                e.target.value.slice(0, 160),
+                        })
                     }
                     rows={5}
                     required
